@@ -7,6 +7,6 @@ public enum PlayerState
     Move, //hareket eden 
     Jump,//zıplayan 
     SlideIdle, //kayma modunda duran
-    Slide, //kayma modunda aktif hareket eden 
-    Roll 
+    Slide//kayma modunda aktif hareket eden 
+    
 }

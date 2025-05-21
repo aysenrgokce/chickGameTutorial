@@ -14,7 +14,7 @@ public class PlayerAnimationController : MonoBehaviour
         _stateController = GetComponent<StateController>();
     }
     
-    private void tart(){
+    private void Start(){
         _playerController.OnPlayerJumped += PlayerController_OnPlayerJumped;
     }
 
