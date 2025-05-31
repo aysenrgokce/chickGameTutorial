@@ -1,4 +1,4 @@
-using System;
+ using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -210,6 +210,11 @@ public class PlayerController : MonoBehaviour
         _movementSpeed += _startingMovementSpeed;
 
 
+    }
+
+    public Rigidbody GetPlayerRigidbody()
+    {
+        return _playerRigidbody;
     }
     #endregion
 }

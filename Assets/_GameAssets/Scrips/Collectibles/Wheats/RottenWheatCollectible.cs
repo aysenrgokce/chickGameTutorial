@@ -1,23 +1,26 @@
 using UnityEngine;
 
-public class RottenWheatCollectible : MonoBehaviour
+public class RottenWheatCollectible : MonoBehaviour, ICollectible
 {
-    // PlayerController tipinde bir referans (oyuncuyu kontrol eden sınıf)
+    [SerializeField] private WheatDesignSO _wheatDesignSO;
     [SerializeField] private PlayerController _playerController;
 
-    // Oyuncunun hareket hızına eklenecek olan artış miktarı
-    [SerializeField] private float _movementDecreaseSpeed;
-
-    // Hız artışının ne kadar süreceğini belirleyen süre (saniye cinsinden)
-    [SerializeField] private float _resetBoostDuration;
-
-    // Bu metod, oyuncu bu nesneyi "topladığında" çağrılır
     public void Collect()
     {
-        // Oyuncunun hareket hızını geçici olarak artır
-        _playerController.SetMovementSpeed(_movementDecreaseSpeed, _resetBoostDuration);
+        if (_playerController == null)
+        {
+            Debug.LogError("RottenWheatCollectible: PlayerController is NULL!");
+            return;
+        }
 
-        // Bu nesneyi sahneden yok et
-        Destroy(gameObject);
+        if (_wheatDesignSO == null)
+        {
+            Debug.LogError("RottenWheatCollectible: WheatDesignSO is NULL!");
+            return;
+        }
+
+        _playerController.SetMovementSpeed(_wheatDesignSO.IncreaseDecreaseMultipler, _wheatDesignSO.ResetBoostDuration);
+
+        Destroy(this.gameObject);
     }
 }

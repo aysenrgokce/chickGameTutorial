@@ -2,21 +2,27 @@ using UnityEngine;
 
 public class PlayerInteractionController : MonoBehaviour
 {
+
+    private PlayerController _playerController;
+
+    private void Awake()
+    {
+        _playerController = GetComponent<PlayerController>();
+    }
     //OnTriggerEnter(Collider other);Bir nesne, Trigger olarak ayarlanmış bir Collider'ın içine girdiğinde bu metod çağrılır.
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(Consts.WheatTypes.GOLD_WHEAT))
+        if (other.gameObject.TryGetComponent<ICollectible>(out var collectible))
         {
-            other.gameObject?.GetComponent<GoldWheatCollectible>().Collect();
+            collectible.Collect();
         }
-        if (other.CompareTag(Consts.WheatTypes.HOLY_WHEAT))
+    }
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.TryGetComponent<IBoostable>(out var boostable))
         {
-            other.gameObject?.GetComponent<HolyWheatCollectible>().Collect();
-        }
-        if (other.CompareTag(Consts.WheatTypes.ROTTEN_WHEAT))
-        {
-            other.gameObject?.GetComponent<RottenWheatCollectible>().Collect();
-        }
+            boostable.Boost(_playerController);
+        } 
     }
 }
 

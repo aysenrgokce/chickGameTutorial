@@ -1,22 +1,31 @@
 using UnityEngine;
-public class GoldWheatCollectible : MonoBehaviour
+public class GoldWheatCollectible : MonoBehaviour , ICollectible
 {
+
+    [SerializeField] private WheatDesignSO _wheatDesignSO;
     // PlayerController tipinde bir referans (oyuncuyu kontrol eden sınıf)
     [SerializeField] private PlayerController _playerController;
 
-    // Oyuncunun hareket hızına eklenecek olan artış miktarı
-    [SerializeField] private float _movementIncreaseSpeed;
-
-    // Hız artışının ne kadar süreceğini belirleyen süre (saniye cinsinden)
-    [SerializeField] private float _resetBoostDuration;
+ 
 
     // Bu metod, oyuncu bu nesneyi "topladığında" çağrılır
     public void Collect()
     {
         // Oyuncunun hareket hızını geçici olarak artır
-        _playerController.SetMovementSpeed(_movementIncreaseSpeed, _resetBoostDuration);
+        if (_playerController == null)
+        {
+            Debug.LogError("PlayerController is NULL!");
+            return;
+        }
 
-        // Bu nesneyi sahneden yok et
-        Destroy(gameObject);
+        if (_wheatDesignSO == null)
+        {
+            Debug.LogError("WheatDesignSO is NULL!");
+            return;
+        }
+
+        _playerController.SetMovementSpeed(_wheatDesignSO.IncreaseDecreaseMultipler, _wheatDesignSO.ResetBoostDuration);
+
+        Destroy(this.gameObject);
     }
 }
