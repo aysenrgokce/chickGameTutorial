@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public event Action OnPlayerJumped;
+    public event Action<PlayerState> OnPlayerStateChanged;    public event Action OnPlayerJumped;
 
     [Header("References")]
     [SerializeField] private Transform _orientationTransform;
@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+//buralara yaçıklamalar ekle 
     private void SetStates()
     {
         var movementDirection = GetMomentDirection();
@@ -104,13 +105,12 @@ public class PlayerController : MonoBehaviour
             _ when !_canJump && !isGrounded => PlayerState.Jump,
             _ => currentState
         };
-
         if (newState != currentState)
         {
             _stateController.ChangeState(newState);
+            OnPlayerStateChanged?.Invoke(newState);
         }
     }
-
     [System.Obsolete]
     private void SetPlayerMovement()
     {
@@ -154,7 +154,6 @@ public class PlayerController : MonoBehaviour
             _playerRigidbody.velocity = new Vector3(limitedVelocity.x, _playerRigidbody.velocity.y, limitedVelocity.z);
         }
     }
-
     [System.Obsolete]
     private void SetPlayerJumping()
     {
@@ -188,7 +187,6 @@ public class PlayerController : MonoBehaviour
     {
         return _isSliding;
     }
-
     public void SetMovementSpeed(float speed, float duration)
     {
         _movementSpeed += speed;
