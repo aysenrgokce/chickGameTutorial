@@ -16,6 +16,7 @@ public class TimerUI : MonoBehaviour
     private float _elapsedTime;
     private bool _isTimerRunning;
     private Tween _rotationTween;
+    private string _finalTime;
 
 
     private void Start()
@@ -31,19 +32,23 @@ public class TimerUI : MonoBehaviour
         switch (gameState)
         {
             case GameState.Pause:
-                PauseTimer();
+                StopTimer();
                 break;
             case GameState.Resume:
                 ResumeTimer();
                 break;
-      
-       }
+            case GameState.GameOver:
+                FinishTimer();
+                break;
+
+
+        }
     }
 
     private void PlayRotationAnimation()
     {
-       _rotationTween = _timerRotatableTransform.DORotate(new Vector3(0f, 0f, -360f), _rotationDuration, RotateMode.FastBeyond360)
-        .SetLoops(-1, LoopType.Restart).SetEase(_rotationEase);
+        _rotationTween = _timerRotatableTransform.DORotate(new Vector3(0f, 0f, -360f), _rotationDuration, RotateMode.FastBeyond360)
+         .SetLoops(-1, LoopType.Restart).SetEase(_rotationEase);
     }
 
     private void StartTimer()
@@ -53,7 +58,7 @@ public class TimerUI : MonoBehaviour
         InvokeRepeating(nameof(UpdateTimerUI), 0f, 1f);
     }
 
-    private void PauseTimer()
+    private void StopTimer()
     {
         _isTimerRunning = false;
         CancelInvoke(nameof(UpdateTimerUI));
@@ -68,6 +73,18 @@ public class TimerUI : MonoBehaviour
             _rotationTween.Play();
         }
     }
+
+    private void FinishTimer()
+    {
+        StopTimer();
+        _finalTime = GetFormattedElapsedTime();
+    }
+    private string GetFormattedElapsedTime()
+    {
+        int minutes = Mathf.FloorToInt(_elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(_elapsedTime % 60f);
+        return String.Format("{0:00}:{1:00}", minutes, seconds);
+    }
     private void UpdateTimerUI()
     {
         if (!_isTimerRunning)
@@ -81,6 +98,11 @@ public class TimerUI : MonoBehaviour
 
         _timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
 
+    }
+
+    public string GetFinalTime()
+    {
+        return _finalTime;
     }
 
 
