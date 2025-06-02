@@ -2,12 +2,15 @@ using UnityEngine;
 
 public class PlayerInteractionController : MonoBehaviour
 {
+    [SerializeField] private Transform _playerVisualTransform;
 
     private PlayerController _playerController;
+    private Rigidbody _playerRigidbody;
 
     private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
+        _playerRigidbody = GetComponent<Rigidbody>();
     }
     //OnTriggerEnter(Collider other);Bir nesne, Trigger olarak ayarlanmış bir Collider'ın içine girdiğinde bu metod çağrılır.
     private void OnTriggerEnter(Collider other)
@@ -22,7 +25,15 @@ public class PlayerInteractionController : MonoBehaviour
         if (other.gameObject.TryGetComponent<IBoostable>(out var boostable))
         {
             boostable.Boost(_playerController);
-        } 
+        }
+    }
+    private void OarticleCollision(GameObject other)
+    {
+        if (other.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.GiveDamage(_playerRigidbody ,_playerVisualTransform);
+        }
+        
     }
 }
 
