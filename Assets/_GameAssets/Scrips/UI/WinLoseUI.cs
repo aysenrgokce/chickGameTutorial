@@ -39,5 +39,6 @@ public class WinLoseUI : MonoBehaviour
         _blackBackGroundImage.DOFade(0.8f, _animationDuration).SetEase(Ease.Linear);
         _losePopupTransform.DOScale(1.5f, _animationDuration).SetEase(Ease.OutBack);
     }
+    
 
 }
